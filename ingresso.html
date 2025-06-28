@@ -15,16 +15,18 @@
             padding: 20px 0;
             background-color: #ECECEC; 
         }
-        .ticket { 
-            padding: 25px; 
-            border: 2px dashed #4A09B8; 
-            background-color: #fff; 
-            text-align: center; 
-            max-width: 400px;
-            width: 90%;
+        .ticket {
+            padding: 40px;
+            border: 2px dashed #4A09B8;
+            background-color: #fff;
+            text-align: center;
+            max-width: 900px;
+            width: 100%;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
             border-radius: 15px;
+            box-sizing: border-box;
         }
+
         h1 { 
             color: #4A09B8; 
             margin-top: 0; 
@@ -82,6 +84,29 @@
         .print-button:hover {
             background-color: #330089;
         }
+
+        @media print {
+            body {
+                background-color: white;
+                margin: 0;
+                padding: 0;
+            }
+
+            .ticket {
+                box-shadow: none;
+                border: 2px dashed #000;
+                page-break-inside: avoid;
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                padding: 20mm;
+            }
+
+            .print-button {
+                display: none;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -133,7 +158,7 @@
             if (nome && cpf) {
                 const qrData = `Evento: Luau Sejais Santos\nNome: ${nome}\nCPF: ${cpf}`;
                 const qrImg = document.createElement('img');
-                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrData)}`;
+                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x3000&data=${encodeURIComponent(qrData)}`;
                 qrImg.alt = "QR Code do Ingresso";
                 qrImg.classList.add('qr-code-img');
                 qrContainer.appendChild(qrImg);
