@@ -64,6 +64,7 @@
   </style>
 </head>
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <div class="container mx-auto">
 
@@ -201,22 +202,38 @@
         const grupoInput = document.getElementById('grupo');
 
         if (nomeInput.value.trim().length < 3) {
-            alert('Por favor, digite seu nome completo.');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Campo obrigatório',
+                text: 'Por favor, digite seu nome completo.'
+            });
             nomeInput.focus();
             return false;
         }
         if (cpfInput.value.length !== 14) {
-            alert('Por favor, digite um CPF válido.');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Campo obrigatório',
+                text: 'Por favor, digite um CPF válido.'
+            });
             cpfInput.focus();
             return false;
         }
         if (telefoneInput.value.length !== 15) {
-            alert('Por favor, digite um número de telefone válido com DDD.');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Campo obrigatório',
+                text: 'Por favor, digite um número de telefone válido com DDD.'
+            });
             telefoneInput.focus();
             return false;
         }
         if (grupoInput.value === "") {
-            alert('Por favor, selecione um grupo de jovens.');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Campo obrigatório',
+                text: 'Por favor, selecione um grupo de jovens.'
+            });
             grupoInput.focus();
             return false;
         }
@@ -255,18 +272,89 @@
         `;
     }
 
-    function nextPage() {
-        // Se estiver na página de cadastro, valida os dados antes de avançar
+    async function nextPage() {
         if (currentPage === 2) {
-            if (!capturarEValidarDados()) {
-                return; // Impede o avanço se a validação falhar
+            if (!capturarEValidarDados()) return;
+
+            const nome = document.getElementById('nome').value.trim();
+            const cpf = document.getElementById('cpf').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const grupo = document.getElementById('grupo').value;
+
+            try {
+                // 1. Verifica se o CPF já foi cadastrado
+                const checkResponse = await fetch('http://localhost:8000/forms/answers/check_answer/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        event_code: "YAB02",
+                        answer_field: "cpf",
+                        answer_value: cpf
+                    })
+                });
+
+                const checkData = await checkResponse.json();
+
+                if (checkData.exists) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'CPF já cadastrado',
+                        text: 'Este CPF já está registrado. Use outro ou entre em contato com a organização.',
+                    });
+                    return;
+                }
+
+                // 2. Envia os dados para o endpoint principal
+                const sendResponse = await fetch('http://localhost:8000/forms/answers/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        event_code: "YAB02",
+                        fields: {
+                            nome: nome,
+                            cpf: cpf,
+                            telefone: telefone,
+                            grupo: grupo
+                        }
+                    })
+                });
+
+                if (!sendResponse.ok) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro ao enviar',
+                        text: 'Não foi possível enviar seus dados. Tente novamente mais tarde.',
+                    });
+                    return;
+                }
+
+                // Armazena nome e CPF para gerar o ingresso
+                nomeParticipante = nome;
+                cpfParticipante = cpf;
+
+                // 3. Avança para a próxima página
+                showPage(currentPage + 1);
+
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro de conexão',
+                    text: 'Verifique sua internet ou tente mais tarde.',
+                });
             }
-        }
-        
-        if (currentPage < totalPages) {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Cadastro realizado!',
+                text: 'Você será redirecionado para o pagamento agora.',
+            });
+
+        } else if (currentPage < totalPages) {
             showPage(currentPage + 1);
         }
     }
+
 
     function prevPage() {
         if (currentPage > 1) {
@@ -280,9 +368,12 @@
         input.setSelectionRange(0, 99999);
         try {
             document.execCommand('copy');
-            alert('Chave PIX copiada!');
         } catch (err) {
-            alert('Não foi possível copiar a chave.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro ao copiar',
+                text: 'Não foi possível copiar a chave.',
+            });
         }
     }
     </script>
