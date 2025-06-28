@@ -11,7 +11,6 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        
     }
 
     body, html {
@@ -20,14 +19,12 @@
         padding: 0;
         overflow-x: hidden;
         background: linear-gradient(180deg, #000000, #330089, #4A09B8, #7C2AE8, #CEB1FF);
-
     }
 
     .page {
         display: none;
         width: 100%;
         min-height: 100vh;
-        
     }
 
     .page.active {
@@ -48,11 +45,10 @@
     }
 
     .container {
-        padding: 0; /* sem padding se quiser */
+        padding: 0;
         max-width: 100%;
     }
 
-        /* Em telas maiores, limita a largura e centraliza com margin auto */
     @media (min-width: 768px) {
         .container {
             max-width: 700px;
@@ -60,21 +56,20 @@
             margin-right: auto;
         }
     }
-
-
+    
+    /* Estilo para feedback de erro na validação */
+    .form-control:invalid, .form-select:invalid {
+        border-color: #dc3545;
+    }
   </style>
 </head>
 <body>
 
   <div class="container mx-auto">
 
-    <!-- Página 1: Introdução -->
     <div id="page1" class="page active">
-        <!-- Imagem de topo -->
-        <!-- Hero com imagem de fundo -->
         <div class="hero-banner d-flex flex-column justify-content-end text-white p-4">
             <div class="bg-dark bg-opacity-50 p-3 rounded">
-                <!-- GIF Aqui -->
                 <div class="text-center mb-3">
                     <img src="./images/apresentacao.gif" alt="Animação" style="width: 100%; max-width: 400px;">
                 </div>
@@ -89,81 +84,62 @@
         </div>
     </div>
 
-    <!-- Página 2: Cadastro -->
     <div id="page2" class="page">
         <div class="hero-banner d-flex flex-column justify-content-end text-white p-4">
             <div class="bg-dark bg-opacity-50 p-3 rounded">
                 <h4 class="mb-3">🙋 Dados do Participante</h4>
-                <form id="formCadastro">
+                <form id="formCadastro" onsubmit="event.preventDefault(); nextPage();">
                     <div class="mb-2">
                         <label for="nome" class="form-label">Nome completo</label>
-                        <input type="text" class="form-control" id="nome" required>
+                        <input type="text" class="form-control" id="nome" required minlength="3">
                     </div>
                     <div class="mb-2">
                         <label for="cpf" class="form-label">CPF</label>
-                        <input type="text" class="form-control" id="cpf" required>
+                        <input type="text" class="form-control" id="cpf" placeholder="000.000.000-00" required oninput="mascaraCPF(this)" maxlength="14">
                     </div>
                     <div class="mb-2">
                         <label for="telefone" class="form-label">Telefone (WhatsApp)</label>
-                        <input type="tel" class="form-control" id="telefone" placeholder="(16) 91234-5678" required>
+                        <input type="tel" class="form-control" id="telefone" placeholder="(16) 91234-5678" required oninput="mascaraTelefone(this)" maxlength="15">
                     </div>
                     <div class="mb-3">
                         <label for="grupo" class="form-label">Grupo de Jovens</label>
                         <select class="form-select" id="grupo" required>
-                            <option value="">Selecione</option>
-                            <option>Grupo de Jovens Arcanjos</option>
-                            <option>Haramim</option>
-                            <option>Filhos da Promessa</option>
-                            <option>Kairós</option>
-                            <option>Brasa</option>
-                            <option>Jucrisc</option>
-                            <option>Nenhum Ainda!</option>
-                            <option>Outro</option>
+                            <option value="">Selecione um grupo</option>
+                            <option value="Arcanjos">Grupo de Jovens Arcanjos</option>
+                            <option value="Haramim">Haramim</option>
+                            <option value="Filhos da Promessa">Filhos da Promessa</option>
+                            <option value="Kairós">Kairós</option>
+                            <option value="Brasa">Brasa</option>
+                            <option value="Jucrisc">Jucrisc</option>
+                            <option value="Nenhum">Nenhum Ainda!</option>
+                            <option value="Outro">Outro</option>
                         </select>
                     </div>
                     <div class="text-end">
-                        <button class="btn btn-secondary me-2" onclick="prevPage()">Voltar</button>
-                        <button class="btn" style="background: linear-gradient(90deg, #ffffff, #9A9A9A);" onclick="nextPage()">Avançar</button>
+                        <button type="button" class="btn btn-secondary me-2" onclick="prevPage()">Voltar</button>
+                        <button type="submit" class="btn" style="background: linear-gradient(90deg, #ffffff, #9A9A9A);">Avançar</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Página 3: Pagamento -->
     <div id="page3" class="page text-center">
-        <div class="hero-banner d-flex flex-column justify-content-end text-white p-4">
-            <div class="bg-dark bg-opacity-50 p-3 rounded">
-                <h4 class="mb-3">💳 Inscrição</h4>
-                <p>Faça o PIX no valor de <strong>R$ 10,00</strong> usando o QR Code abaixo:</p>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?data=00020126650014br.gov.bcb.pix0114+55169812746410225Luau Jovens Sejais Santos27600016BR.COM.PAGSEGURO01362AE05E5E-EF3C-40E3-B71D-B9285CB0131F520400005303986540510.005802BR5925Lyandra Cristiele de Oliv6010SAO CARLOS62290525PAGS0000010002506221136886304281C&size=200x200" alt="QR Code" class="img-fluid mb-2">
-                <p class="small">Ou copie a chave PIX:</p>
-                <div class="input-group mb-3">
-                    <input type="text" id="chavePix" class="form-control" value="00020126650014br.gov.bcb.pix0114+55169812746410225Luau Jovens Sejais Santos27600016BR.COM.PAGSEGURO01362AE05E5E-EF3C-40E3-B71D-B9285CB0131F520400005303986540510.005802BR5925Lyandra Cristiele de Oliv6010SAO CARLOS62290525PAGS0000010002506221136886304281C" readonly>
-                    <button class="btn btn-outline-secondary" onclick="copiarPix()">Copiar</button>
-                </div>
-                <div class="text-end">
-                    <button class="btn btn-secondary me-2" onclick="prevPage()">Voltar</button>
-                    <button class="btn" style="background: linear-gradient(90deg, #ffffff, #9A9A9A);" onclick="nextPage()">Avançar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Página 4: Informações finais -->
-    <div id="page4" class="page text-center">
-        <div class="hero-banner d-flex flex-column justify-content-end text-white p-4">
-            <div class="bg-dark bg-opacity-50 p-3 rounded">
-                <h4 class="mb-3">🎉 Tudo pronto!</h4>
-                <p>Envie o comprovante para:</p>
-                <p><strong>📱 (16) 99610-7202</strong></p>
-                <a href="https://www.google.com/maps/place/Capela+S%C3%A3o+Gabriel/@-22.0159762,-47.84403,19.53z/data=!4m6!3m5!1s0x94b87700448bea43:0x3387a1d7a710a387!8m2!3d-22.0157959!4d-47.8438093!16s%2Fg%2F11w8qz58sq?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D" target="_blank">
-                    📍 Ver no Google Maps
-                </a>
-                <p>Siga nosso Instagram para novidades:</p>
-                <a href="https://instagram.com/gpj_arcanjos" target="_blank">@gpj_arcanjos</a>
-                <div class="text-center mt-4">
-                    <button class="btn btn-secondary" onclick="prevPage()">Voltar</button>
+        <div id="containerPagamento">
+            <div class="hero-banner d-flex flex-column justify-content-end text-white p-4">
+                <div class="bg-dark bg-opacity-50 p-3 rounded">
+                    <h4 class="mb-3">💳 Inscrição</h4>
+                    <p>Faça o PIX no valor de <strong>R$ 10,00</strong> usando o QR Code abaixo:</p>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?data=00020126650014br.gov.bcb.pix0114+55169812746410225Luau Jovens Sejais Santos27600016BR.COM.PAGSEGURO01362AE05E5E-EF3C-40E3-B71D-B9285CB0131F520400005303986540510.005802BR5925Lyandra Cristiele de Oliv6010SAO CARLOS62290525PAGS0000010002506221136886304281C&size=200x200" alt="QR Code" class="img-fluid mb-2">
+                    <p class="small">Ou copie a chave PIX:</p>
+                    <div class="input-group mb-3">
+                        <input type="text" id="chavePix" class="form-control" value="00020126650014br.gov.bcb.pix0114+55169812746410225Luau Jovens Sejais Santos27600016BR.COM.PAGSEGURO01362AE05E5E-EF3C-40E3-B71D-B9285CB0131F520400005303986540510.005802BR5925Lyandra Cristiele de Oliv6010SAO CARLOS62290525PAGS0000010002506221136886304281C" readonly>
+                        <button class="btn btn-outline-secondary" onclick="copiarPix()">Copiar</button>
+                    </div>
+                    <div class="text-end">
+                        <button class="btn btn-secondary me-2" onclick="prevPage()">Voltar</button>
+                        <button class="btn" style="background: linear-gradient(90deg, #ffffff, #9A9A9A);" onclick="abrirIngressoEFinalizar()">Finalizar e Abrir Ingresso</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -171,29 +147,144 @@
 
   </div>
 
-  <script>
+    <script>
     let currentPage = 1;
+    let nomeParticipante = '';
+    let cpfParticipante = '';
+
+    const totalPages = 3; // O fluxo agora tem 3 páginas principais
+
+    // --- MÁSCARAS DE INPUT ---
+
+    function mascaraCPF(cpfInput) {
+        let value = cpfInput.value.replace(/\D/g, ''); // Remove tudo que não for dígito
+        if (value.length > 11) value = value.slice(0, 11);
+
+        if (value.length > 9) {
+            value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        } else if (value.length > 6) {
+            value = value.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+        } else if (value.length > 3) {
+            value = value.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+        }
+        cpfInput.value = value;
+    }
+
+    function mascaraTelefone(telInput) {
+        let value = telInput.value.replace(/\D/g, ''); // Remove tudo que não for dígito
+        if (value.length > 11) value = value.slice(0, 11);
+
+        if (value.length > 10) {
+            value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+        } else if (value.length > 6) {
+            value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+        } else if (value.length > 2) {
+            value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+        } else {
+            value = value.replace(/(\d*)/, '($1');
+        }
+        telInput.value = value;
+    }
+
+    // --- NAVEGAÇÃO E VALIDAÇÃO ---
 
     function showPage(pageNumber) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(`page${pageNumber}`).classList.add('active');
-      currentPage = pageNumber;
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(`page${pageNumber}`).classList.add('active');
+        currentPage = pageNumber;
+    }
+
+    function capturarEValidarDados() {
+        const nomeInput = document.getElementById('nome');
+        const cpfInput = document.getElementById('cpf');
+        const telefoneInput = document.getElementById('telefone');
+        const grupoInput = document.getElementById('grupo');
+
+        if (nomeInput.value.trim().length < 3) {
+            alert('Por favor, digite seu nome completo.');
+            nomeInput.focus();
+            return false;
+        }
+        if (cpfInput.value.length !== 14) {
+            alert('Por favor, digite um CPF válido.');
+            cpfInput.focus();
+            return false;
+        }
+        if (telefoneInput.value.length !== 15) {
+            alert('Por favor, digite um número de telefone válido com DDD.');
+            telefoneInput.focus();
+            return false;
+        }
+        if (grupoInput.value === "") {
+            alert('Por favor, selecione um grupo de jovens.');
+            grupoInput.focus();
+            return false;
+        }
+
+        // Se tudo estiver OK, salva os dados
+        nomeParticipante = nomeInput.value;
+        cpfParticipante = cpfInput.value;
+        return true;
+    }
+    
+    function abrirIngressoEFinalizar() {
+        // Codifica os dados para serem seguros para URL
+        const nomeCodificado = encodeURIComponent(nomeParticipante);
+        const cpfCodificado = encodeURIComponent(cpfParticipante);
+
+        // Monta a URL para o arquivo do ingresso com os dados como parâmetros
+        const urlIngresso = `ingresso.html?nome=${nomeCodificado}&cpf=${cpfCodificado}`;
+        
+        // Abre o ingresso em uma nova aba do navegador
+        window.open(urlIngresso, '_blank');
+        
+        // Substitui o conteúdo da página de pagamento pela tela final
+        const containerPagamento = document.getElementById('containerPagamento');
+        containerPagamento.innerHTML = `
+            <div class="hero-banner d-flex flex-column justify-content-center align-items-center text-white p-4">
+                <div class="bg-dark bg-opacity-50 p-4 rounded text-center">
+                    <h4 class="mb-3">🎉 Tudo pronto!</h4>
+                    <p>Seu ingresso foi aberto em uma nova aba.</p>
+                    <p class="mb-4">Não se esqueça de salvar e enviar o comprovante de pagamento para validar sua inscrição!</p>
+                    <p><strong>📱 WhatsApp: (16) 99610-7202</strong></p>
+                    <div class="mt-4">
+                        <a href="https://instagram.com/gpj_arcanjos" target="_blank" class="btn btn-light">Siga @gpj_arcanjos</a>
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
     function nextPage() {
-      if (currentPage < 4) showPage(currentPage + 1);
+        // Se estiver na página de cadastro, valida os dados antes de avançar
+        if (currentPage === 2) {
+            if (!capturarEValidarDados()) {
+                return; // Impede o avanço se a validação falhar
+            }
+        }
+        
+        if (currentPage < totalPages) {
+            showPage(currentPage + 1);
+        }
     }
 
     function prevPage() {
-      if (currentPage > 1) showPage(currentPage - 1);
+        if (currentPage > 1) {
+            showPage(currentPage - 1);
+        }
     }
 
     function copiarPix() {
-      const input = document.getElementById('chavePix');
-      input.select();
-      document.execCommand('copy');
-      alert('Chave PIX copiada!');
+        const input = document.getElementById('chavePix');
+        input.select();
+        input.setSelectionRange(0, 99999);
+        try {
+            document.execCommand('copy');
+            alert('Chave PIX copiada!');
+        } catch (err) {
+            alert('Não foi possível copiar a chave.');
+        }
     }
-  </script>
+    </script>
 </body>
 </html>

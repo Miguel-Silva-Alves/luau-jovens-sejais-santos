@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seu Ingresso - Luau Jovens Sejais Santos</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 20px 0;
+            background-color: #ECECEC; 
+        }
+        .ticket { 
+            padding: 25px; 
+            border: 2px dashed #4A09B8; 
+            background-color: #fff; 
+            text-align: center; 
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 15px;
+        }
+        h1 { 
+            color: #4A09B8; 
+            margin-top: 0; 
+            font-size: 1.8em; 
+            line-height: 1.2;
+        }
+        p { 
+            margin: 10px 0; 
+            font-size: 1em; 
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #ddd;
+            margin: 20px 0;
+        }
+        .detalhes-evento p {
+            font-size: 0.95em;
+            margin: 5px 0;
+        }
+        .info-pagamento {
+            font-size: 0.9em;
+            color: #d9534f; /* Tom de vermelho */
+            background-color: #f2dede; /* Fundo avermelhado claro */
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ebccd1;
+        }
+        .links-uteis a {
+            display: inline-block;
+            margin: 5px 10px;
+            color: #4A09B8;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .links-uteis a:hover {
+            text-decoration: underline;
+        }
+        .qr-code-img { 
+            margin-top: 15px; 
+            max-width: 100%; 
+            height: auto; 
+        }
+        .print-button {
+            margin-top: 25px;
+            padding: 12px 25px;
+            background-color: #4A09B8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.2s;
+        }
+        .print-button:hover {
+            background-color: #330089;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket">
+        <h1>Luau Jovens Sejais Santos</h1>
+        
+        <div class="detalhes-evento">
+            <p><strong>🗓️ Quando:</strong> 09 de Agosto de 2025, às 18h</p>
+            <p><strong>📍 Onde:</strong> Capela São Gabriel, Douradinho - São Carlos</p>
+        </div>
+
+        <hr>
+
+        <p><strong>Nome:</strong> <span id="ingressoNome">Carregando...</span></p>
+        <p><strong>CPF:</strong> <span id="ingressoCpf">Carregando...</span></p>
+        
+        <div id="qrcodeIngresso"></div>
+
+        <p>Apresente este QR Code na entrada do evento.</p>
+
+        <hr>
+        
+        <p class="info-pagamento">
+            <strong>Atenção:</strong> Sua inscrição só é válida após o envio do comprovante de R$ 10,00 para o WhatsApp: <strong>(16) 99610-7202</strong>.
+        </p>
+
+        <div class="links-uteis">
+            <a href="https://www.google.com/maps/place/Capela+S%C3%A3o+Gabriel/@-22.0159762,-47.84403,19.53z/data=!4m6!3m5!1s0x94b87700448bea43:0x3387a1d7a710a387!8m2!3d-22.0157959!4d-47.8438093!16s%2Fg%2F11w8qz58sq?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D" target="_blank">📍 Ver no Google Maps</a>
+            <a href="https://instagram.com/gpj_arcanjos" target="_blank">📱 Siga no Instagram</a>
+        </div>
+        
+        <button class="print-button" onclick="window.print()">Imprimir / Salvar como PDF</button>
+    </div>
+
+    <script>
+        // Este script é executado assim que a página 'ingresso.html' carrega
+        window.onload = function() {
+            // Pega os parâmetros da URL (ex: ?nome=Joao&cpf=123)
+            const params = new URLSearchParams(window.location.search);
+            const nome = params.get('nome');
+            const cpf = params.get('cpf');
+
+            // Preenche as informações na página
+            document.getElementById('ingressoNome').innerText = nome || 'Não informado';
+            document.getElementById('ingressoCpf').innerText = cpf || 'Não informado';
+
+            // Gera o QR Code com os dados recebidos
+            const qrContainer = document.getElementById('qrcodeIngresso');
+            if (nome && cpf) {
+                const qrData = `Evento: Luau Sejais Santos\nNome: ${nome}\nCPF: ${cpf}`;
+                const qrImg = document.createElement('img');
+                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrData)}`;
+                qrImg.alt = "QR Code do Ingresso";
+                qrImg.classList.add('qr-code-img');
+                qrContainer.appendChild(qrImg);
+            }
+        };
+    </script>
+</body>
+</html>
