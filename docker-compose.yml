@@ -1,0 +1,22 @@
+version: '3.3'
+
+services:
+  nginx:
+    build: ./nginx
+    container_name: forms_nginx
+    ports:
+      - 6068:80
+    environment:
+      - VIRTUAL_HOST=forms.masdeveloper.com.br
+      - LETSENCRYPT_HOST=forms.masdeveloper.com.br
+    networks:
+      - net
+
+networks:
+  net:
+    external: true
+
+
+volumes:
+  postgres_data:
+  static_volume:
