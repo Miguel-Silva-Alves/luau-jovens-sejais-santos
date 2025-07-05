@@ -61,6 +61,25 @@
     .form-control:invalid, .form-select:invalid {
         border-color: #dc3545;
     }
+
+    
+    .btn {
+        position: relative;
+        z-index: 9999;
+        pointer-events: auto;
+    }
+
+    /* Desativa cliques em camadas que estão sobre o botão */
+    .hero-banner::before,
+    .hero-banner::after,
+    .hero-banner {
+        pointer-events: none;
+    }
+
+    /* Reativa cliques apenas dentro da caixa com os botões */
+    .hero-banner .bg-dark {
+        pointer-events: auto;
+    }
   </style>
 </head>
 <body>
@@ -76,7 +95,7 @@
                 </div>
                 <p><strong>📍 Local:</strong> Capela São Gabriel, Douradinho - São Carlos</p>
                 <p><strong>💸 Valor:</strong> R$ 10,00 (+ 1kg de Alimento não perecível)</p>
-                <p><strong>⏰ Quando:</strong> 09 de Agosto, às 18h</p>
+                <p><strong>⏰ Quando:</strong> 09 de Agosto, às 18h30</p>
                 <p><strong>🎤 Atração:</strong> Banda Colo de Deus</p>
                 <div class="text-end">
                     <button class="btn" style="background: linear-gradient(90deg, #ffffff, #9A9A9A);" onclick="nextPage()">Avançar</button>
@@ -318,6 +337,7 @@
         }
 
         async function nextPage() {
+            console.log(`Avançando para a página ${currentPage + 1}`);
             if (currentPage === 2) {
                 if (!capturarEValidarDados()) return;
 
